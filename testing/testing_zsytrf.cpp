@@ -5,7 +5,7 @@
        Univ. of Colorado, Denver
        @date
 
-       @precisions normal z -> c d s
+       @precisions normal z -> c
        @author Ichitaro Yamazaki
 */
 // includes, system
@@ -114,7 +114,7 @@ double get_residual(
     init_matrix( opts, n, n, A, lda );
 
     // compute r = Ax - b, saved in b
-    fortranf77_zsymv( lapack_uplo_const(uplo), &n, &c_one, A, &lda, x, &ione, &c_neg_one, b, &ione );
+    lapackf77_zsymv( lapack_uplo_const(uplo), &n, &c_one, A, &lda, x, &ione, &c_neg_one, b, &ione );
 
     // compute residual |Ax - b| / (n*|A|*|x|)
     double norm_x, norm_A, norm_r, work[1];
@@ -925,7 +925,7 @@ int main( int argc, char** argv)
                 //for(int kk=0; kk<N; kk++)
                 //    h_A[kk+(N-1)*lda] = h_A[N-1+kk*lda] = 0.;
                 TESTING_CHECK( magma_malloc( (void**)&dinert, 3*sizeof(int)) );
-                magmablas_zsiinertia(opts.uplo, N, d_A, ldda, ipiv, dinert, opts.queue);
+                magmablas_zsyinertia(opts.uplo, N, d_A, ldda, ipiv, dinert, opts.queue);
                 magma_getvector( 3, sizeof(int), dinert, 1, inert, 1, opts.queue );
                 printf("inertia: positive / negative / zero = %d / %d / %d\n",
                        inert[0], inert[1], inert[2]);
@@ -936,7 +936,7 @@ int main( int argc, char** argv)
             else if (aasen) {
                 // CPU-interface to Aasen's LTLt
                 gpu_time = magma_wtime();
-                magma_zhetrf_aasen( opts.uplo, cpu_panel, N, h_A, lda, ipiv, &info);
+                magma_zsytrf_aasen( opts.uplo, cpu_panel, N, h_A, lda, ipiv, &info);
                 gpu_time = magma_wtime() - gpu_time;
             }
             else if (row) {

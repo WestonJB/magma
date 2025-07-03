@@ -381,7 +381,7 @@ subroutine magmaf_zlaswp_columnserial( n, dA, lda, k1, k2, dipiv, queue )
     magma_devptr_t   :: queue
 end
 
-integer function magmablasf_zsiinertia( uplo, n, dA, ldda, ipiv, dneig, queue )
+integer function magmablasf_zsyinertia( uplo, n, dA, ldda, ipiv, dneig, queue )
     character        :: uplo
     integer          :: n
     magma_devptr_t   :: dA

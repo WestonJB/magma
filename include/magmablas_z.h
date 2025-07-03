@@ -486,7 +486,7 @@ magma_zlaswp_columnserial(
     magma_int_t *dipiv, magma_queue_t queue);
 
 magma_int_t
-magmablas_zsiinertia(
+magmablas_zsyinertia(
     magma_uplo_t uplo,
     magma_int_t n,
     magmaDoubleComplex_const_ptr dA, magma_int_t ldda,

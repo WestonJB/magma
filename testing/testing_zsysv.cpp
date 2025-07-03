@@ -5,7 +5,7 @@
        Univ. of Colorado, Denver
        @date
 
-       @precisions normal z -> c d s
+       @precisions normal z -> c
        @author Ichitaro Yamazaki
 */
 // includes, system

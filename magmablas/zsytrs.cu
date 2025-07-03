@@ -5,7 +5,7 @@
        Univ. of Colorado, Denver
        @date
 
-       @precisions normal z -> s d c
+       @precisions normal z -> c
 
        @author Stan Tomov
 */
@@ -16,129 +16,42 @@
 #define dA(i_, j_) (dA + (i_) + (j_)*ldda)
 #define dB(i_, j_) (dB + (i_) + (j_)*lddb)
 
+// Definition for helper functions can be found in zhetrs.cu
+
 __global__ void
 magma_zgeru_1(
     int n, int k, int kp, int nrhs, 
-    magmaDoubleComplex *A, magmaDoubleComplex *B, int lddb)
-{
-    int tx  = threadIdx.x + 64 * blockIdx.x;
-
-    if (k+1+tx < n)
-        if (k!=kp && k+1+tx == kp)
-            // if k <-> kp pivoting, B[k] holds the result for B[kp]
-            B[k]  -= A[kp]*B[kp];
-        else
-            B[k+1+tx] -= A[k+1+tx]*B[kp];
-}
+    magmaDoubleComplex *A, magmaDoubleComplex *B, int lddb);
 
 __global__ void
 magma_zswap_scal(
     int k, int kp, int nrhs, 
-    magmaDoubleComplex *A, magmaDoubleComplex *B, int lddb)
-{
-    magmaDoubleComplex tmp;
-    if (k != kp){
-        tmp   = B[k];
-        B[k]  = B[kp];
-        B[kp] = tmp;
-    }
-    B[k] *= MAGMA_Z_DIV(MAGMA_Z_ONE, A[k]);
-}
+    magmaDoubleComplex *A, magmaDoubleComplex *B, int lddb);
 
 __global__ void
 magma_zgeru_2(
     int n, int k, int kp, int nrhs,
-    magmaDoubleComplex *A, int ldda, magmaDoubleComplex *B, int lddb)
-{
-    int tx  = threadIdx.x + 64 * blockIdx.x;
-
-    if (k+2+tx < n)
-        if (k+1!=kp && k+2+tx == kp)
-            // if k+1 <-> kp pivoting, B[k+1] holds the result for B[kp]
-            B[k+1]  -= A[kp]*B[k] + A[kp+ldda]*B[kp];
-        else
-            B[k+2+tx] -= A[k+2+tx]*B[k] + A[k+2+tx+ldda]*B[kp];
-}
+    magmaDoubleComplex *A, int ldda, magmaDoubleComplex *B, int lddb);
 
 __global__ void
 magma_zswap_scal_inverseblock_lower(
     int k, int kp, int nrhs, 
-    magmaDoubleComplex *dA, int ldda, magmaDoubleComplex *dB, int lddb)
-{
-    int tx  = threadIdx.x;
+    magmaDoubleComplex *dA, int ldda, magmaDoubleComplex *dB, int lddb);
 
-    magmaDoubleComplex tmp;
-    if (k+1 != kp){
-        tmp         = *dB(k+1,tx);
-        *dB(k+1,tx) = *dB(kp ,tx);
-        *dB( kp,tx) = tmp;
-    }
-
-    magmaDoubleComplex AKM1K = *dA(1,0);
-    magmaDoubleComplex AKM1  = MAGMA_Z_DIV(*dA(0,0), MAGMA_Z_CONJ( AKM1K ) );
-    magmaDoubleComplex AK    = MAGMA_Z_DIV(*dA(1,1), AKM1K );
-    magmaDoubleComplex DENOM = AKM1*AK - MAGMA_Z_ONE;
-
-    magmaDoubleComplex  BKM1 = MAGMA_Z_DIV( *dB(k,tx),  MAGMA_Z_CONJ(AKM1K));
-    magmaDoubleComplex  BK   = MAGMA_Z_DIV( *dB(k+1,tx), AKM1K );
-
-    *dB(k,tx) = MAGMA_Z_DIV(  AK*BKM1-BK ,  DENOM );
-    *dB(k+1,tx) = MAGMA_Z_DIV( AKM1*BK-BKM1,  DENOM );
-}
-
-// This kernel scales the array B by 1/alpha.
-// The kernel is called on one thread block with thread equal the 
-// length of B, so that each thread scales just one element of B.
 __global__ void
 magmablas_zdscal_inverse(
     magmaDoubleComplex *alpha, 
-    magmaDoubleComplex *B, int ldb)
-{
-    int tx  = threadIdx.x;
+    magmaDoubleComplex *B, int ldb);
 
-    magmaDoubleComplex scale = MAGMA_Z_DIV(MAGMA_Z_ONE, *alpha);
-    B[tx*ldb] *= scale;
-}
-
-// Multiply array dB of size 2 by the inverse of the 2x2 diagonal block at dA.
-// This is a batch operation where each thread is doing one multiplication.
 __global__ void
 magmablas_zdscal_inverseblock_upper(
     const magmaDoubleComplex *dA, int ldda, 
-    magmaDoubleComplex *dB, int lddb)
-{
-    int tx  = threadIdx.x;
-    
-    magmaDoubleComplex AKM1K = *dA(0,1);
-    magmaDoubleComplex AKM1  = MAGMA_Z_DIV(*dA(0,0), AKM1K);
-    magmaDoubleComplex AK    = MAGMA_Z_DIV(*dA(1,1), MAGMA_Z_CONJ( AKM1K ));
-    magmaDoubleComplex DENOM = AKM1*AK - MAGMA_Z_ONE;
-
-    magmaDoubleComplex  BKM1 = MAGMA_Z_DIV( *dB(0,tx), AKM1K);
-    magmaDoubleComplex  BK   = MAGMA_Z_DIV( *dB(1,tx), MAGMA_Z_CONJ(AKM1K) );
-
-    *dB(0,tx) = MAGMA_Z_DIV(  AK*BKM1-BK ,  DENOM );
-    *dB(1,tx) = MAGMA_Z_DIV( AKM1*BK-BKM1,  DENOM );
-}
+    magmaDoubleComplex *dB, int lddb);
 
 __global__ void
 magmablas_zdscal_inverseblock_lower(
     const magmaDoubleComplex *dA, int ldda,
-    magmaDoubleComplex *dB, int lddb)
-{
-    int tx  = threadIdx.x;
-
-    magmaDoubleComplex AKM1K = *dA(1,0);
-    magmaDoubleComplex AKM1  = MAGMA_Z_DIV(*dA(0,0), MAGMA_Z_CONJ( AKM1K ) );
-    magmaDoubleComplex AK    = MAGMA_Z_DIV(*dA(1,1), AKM1K );
-    magmaDoubleComplex DENOM = AKM1*AK - MAGMA_Z_ONE;
-
-    magmaDoubleComplex  BKM1 = MAGMA_Z_DIV( *dB(0,tx),  MAGMA_Z_CONJ(AKM1K));
-    magmaDoubleComplex  BK   = MAGMA_Z_DIV( *dB(1,tx), AKM1K );
-
-    *dB(0,tx) = MAGMA_Z_DIV(  AK*BKM1-BK ,  DENOM );
-    *dB(1,tx) = MAGMA_Z_DIV( AKM1*BK-BKM1,  DENOM );
-}
+    magmaDoubleComplex *dB, int lddb);
 
 
 /***************************************************************************//**

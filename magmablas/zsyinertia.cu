@@ -8,7 +8,7 @@
        @author Hadeer Farahat
        @author Stan Tomov
 
-       @precisions normal z -> s d c 
+       @precisions normal z -> c 
 */
 #include "magma_internal.h"
 #include "commonblas_d.h"
@@ -18,7 +18,7 @@
 #define NBLOCKS      40
 
 __global__ void
-zsiinertia_upper_kernel(int n, magmaDoubleComplex_const_ptr dA, int ldda, magma_int_t *ipiv, int *dneig)
+zsyinertia_upper_kernel(int n, magmaDoubleComplex_const_ptr dA, int ldda, magma_int_t *ipiv, int *dneig)
 {
     const int tx  = threadIdx.x;
     const int blk = blockIdx.x;
@@ -98,7 +98,7 @@ zsiinertia_upper_kernel(int n, magmaDoubleComplex_const_ptr dA, int ldda, magma_
 }
 
 __global__ void
-zsiinertia_lower_kernel(int n, magmaDoubleComplex_const_ptr dA, int ldda, magma_int_t *ipiv, int *dneig)
+zsyinertia_lower_kernel(int n, magmaDoubleComplex_const_ptr dA, int ldda, magma_int_t *ipiv, int *dneig)
 {
     const int tx  = threadIdx.x;
     const int blk = blockIdx.x;
@@ -181,7 +181,7 @@ zsiinertia_lower_kernel(int n, magmaDoubleComplex_const_ptr dA, int ldda, magma_
 /***************************************************************************//**
     Purpose
     -------
-    magmablas_zsiinertia computes the inertia of a hermitian and block 
+    magmablas_zsyinertia computes the inertia of a hermitian and block 
     diagonal matrix with 1-by-1 and 2-by-2 diagonal blocks. These are matrices
     comming from the Bunch-Kaufman with diagonal pivoting factorizations 
     (the ZSYTRF routine). 
@@ -221,7 +221,7 @@ zsiinertia_lower_kernel(int n, magmaDoubleComplex_const_ptr dA, int ldda, magma_
 
 extern "C"
 magma_int_t
-magmablas_zsiinertia(
+magmablas_zsyinertia(
     magma_uplo_t uplo,
     magma_int_t n,
     magmaDoubleComplex_const_ptr dA, magma_int_t ldda, 
@@ -260,13 +260,13 @@ magmablas_zsiinertia(
     cudaMemsetAsync(dneig, 0, 3*sizeof(int), queue->cuda_stream() );
 
     if (upper)
-        zsiinertia_upper_kernel<<<grid, threads, 0, queue->cuda_stream() >>>
+        zsyinertia_upper_kernel<<<grid, threads, 0, queue->cuda_stream() >>>
             (n, dA, ldda, ipiv, dneig);
     else
-        zsiinertia_lower_kernel<<<grid, threads, 0, queue->cuda_stream() >>>
+        zsyinertia_lower_kernel<<<grid, threads, 0, queue->cuda_stream() >>>
             (n, dA, ldda, ipiv, dneig);
 
     return info;
 }
 
-// end magmablas_zsiinertia
+// end magmablas_zsyinertia
