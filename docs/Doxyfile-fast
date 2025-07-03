@@ -1498,6 +1498,9 @@ INPUT                  = \
 	../src/zstedx_m.cpp                                         \
 	../src/zsysv.cpp                                            \
 	../src/zsysv_nopiv_gpu.cpp                                  \
+	../src/zsytrf.cpp                                           \
+	../src/zsytrf_aasen.cpp                                     \
+	../src/zsytrf_nopiv.cpp                                     \
 	../src/zsytrf_nopiv_cpu.cpp                                 \
 	../src/zsytrf_nopiv_gpu.cpp                                 \
 	../src/zsytrs_nopiv_gpu.cpp                                 \

@@ -454,6 +454,20 @@ void magmaf_zlaswp_columnserial(
         dipiv, *queue );
 }
 
+#define magmablasf_zsiinertia FORTRAN_NAME( magmablasf_zsiinertia, MAGMABLASF_ZSIINERTIA )
+magma_int_t magmablasf_zsiinertia(
+    const char* uplo, magma_int_t *n,
+    devptr_t *dA, magma_int_t *ldda,
+    magma_int_t *ipiv,
+    int *dneig, magma_queue_t *queue )
+{
+    return magmablas_zsiinertia(
+        magma_uplo_const(*uplo), *n,
+        magma_zdevptr(dA), *ldda,
+        ipiv,
+        dneig, *queue );
+}
+
 #define magmablasf_zsymmetrize FORTRAN_NAME( magmablasf_zsymmetrize, MAGMABLASF_ZSYMMETRIZE )
 void magmablasf_zsymmetrize(
     const char* uplo, magma_int_t *m,

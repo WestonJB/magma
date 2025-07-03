@@ -794,18 +794,30 @@ hesv = (
 	# Bunch-Kauffman
 	('testing_zhetrf', '-L --version 1 -c2',  n,    ''),
 	('testing_zhetrf', '-U --version 1 -c2',  n,    ''),
-
+ 
+	('testing_zsytrf', '-L --version 1 -c2',  n,    ''),
+	('testing_zsytrf', '-U --version 1 -c2',  n,    ''),
+ 
 	# no-pivot LDLt, CPU interface
 	('testing_zhetrf', '-L --version 3 -c2',  n,    ''),
 	('testing_zhetrf', '-U --version 3 -c2',  n,    ''),
+ 
+	('testing_zsytrf', '-L --version 3 -c2',  n,    ''),
+	('testing_zsytrf', '-U --version 3 -c2',  n,    ''),
 
 	# no-pivot LDLt, GPU interface
 	('testing_zhetrf', '-L --version 4 -c2',  n,    ''),
 	('testing_zhetrf', '-U --version 4 -c2',  n,    ''),
+ 
+	('testing_zsytrf', '-L --version 4 -c2',  n,    ''),
+	('testing_zsytrf', '-U --version 4 -c2',  n,    ''),
 
 	# Aasen's
 	('testing_zhetrf', '-L --version 6 -c2',  n,    ''),
 	('#testing_zhetrf','-U --version 6 -c2',  n,    'upper not implemented'),
+
+	('testing_zsytrf', '-L --version 6 -c2',  n,    ''),
+	('#testing_zsytrf','-U --version 6 -c2',  n,    'upper not implemented'),
 )
 if (opts.hesv):
 	tests += hesv

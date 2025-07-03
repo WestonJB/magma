@@ -104,21 +104,21 @@ double get_residual(
         }
     }
     else {
-        lapackf77_zhetrs( lapack_uplo_const(uplo), &n, &ione, A, &lda, ipiv, x, &n, &info );
+        lapackf77_zsytrs( lapack_uplo_const(uplo), &n, &ione, A, &lda, ipiv, x, &n, &info );
     }
     if (info != 0) {
-        printf("lapackf77_zhetrs returned error %lld: %s.\n",
+        printf("lapackf77_zsytrs returned error %lld: %s.\n",
                (long long) info, magma_strerror( info ));
     }
     // reset to original A
     init_matrix( opts, n, n, A, lda );
 
     // compute r = Ax - b, saved in b
-    blasf77_zhemv( lapack_uplo_const(uplo), &n, &c_one, A, &lda, x, &ione, &c_neg_one, b, &ione );
+    fortranf77_zsymv( lapack_uplo_const(uplo), &n, &c_one, A, &lda, x, &ione, &c_neg_one, b, &ione );
 
     // compute residual |Ax - b| / (n*|A|*|x|)
     double norm_x, norm_A, norm_r, work[1];
-    norm_A = lapackf77_zlanhe( "Fro", lapack_uplo_const(uplo), &n, A, &lda, work );
+    norm_A = lapackf77_zlansy( "Fro", lapack_uplo_const(uplo), &n, A, &lda, work );
     norm_r = lapackf77_zlange( "Fro", &n, &ione, b, &n, work );
     norm_x = lapackf77_zlange( "Fro", &n, &ione, x, &n, work );
 
@@ -164,7 +164,7 @@ double get_residual_gpu(
     time[1] = magma_sync_wtime( opts.queue );
     magma_zgetmatrix(n, n, dA, ldda, A, lda, opts.queue );
     magma_zgetvector(n, dx, 1, x, 1, opts.queue );
-    lapackf77_zhetrs( lapack_uplo_const(uplo), &n, &ione, A, &lda, ipiv, x, &n, &info );
+    lapackf77_zsytrs( lapack_uplo_const(uplo), &n, &ione, A, &lda, ipiv, x, &n, &info );
     magma_zsetvector(n, x, 1, dx, 1, opts.queue );
     time[1] = magma_sync_wtime( opts.queue ) - time[1];
 
@@ -172,25 +172,25 @@ double get_residual_gpu(
     blasf77_zcopy( &n, b, &ione, x, &ione );
     magma_zsetvector(n, x, 1, dx, 1, opts.queue );
     time[0] = magma_sync_wtime( opts.queue );
-    magma_zhetrs_gpu( uplo, n, ione, dA, ldda, ipiv, dx, n, &info, opts.queue );
+    magma_zsytrs_gpu( uplo, n, ione, dA, ldda, ipiv, dx, n, &info, opts.queue );
     time[0] = magma_sync_wtime( opts.queue ) - time[0];
 
     magma_zgetvector(n, dx, 1, x, 1, opts.queue );
     magma_free(dx);
 
     if (info != 0) {
-        printf("magma_zhetrs returned error %lld: %s.\n",
+        printf("magma_zsytrs returned error %lld: %s.\n",
                (long long) info, magma_strerror( info ));
     }
     // reset to original A
     init_matrix( opts, n, n, A, lda );
 
     // compute r = Ax - b, saved in b
-    blasf77_zhemv( lapack_uplo_const(uplo), &n, &c_one, A, &lda, x, &ione, &c_neg_one, b, &ione );
+    lapackf77_zsymv( lapack_uplo_const(uplo), &n, &c_one, A, &lda, x, &ione, &c_neg_one, b, &ione );
 
     // compute residual |Ax - b| / (n*|A|*|x|)
     double norm_x, norm_A, norm_r, work[1];
-    norm_A = lapackf77_zlanhe( "Fro", lapack_uplo_const(uplo), &n, A, &lda, work );
+    norm_A = lapackf77_zlansy( "Fro", lapack_uplo_const(uplo), &n, A, &lda, work );
     norm_r = lapackf77_zlange( "Fro", &n, &ione, b, &n, work );
     norm_x = lapackf77_zlange( "Fro", &n, &ione, x, &n, work );
 
@@ -219,7 +219,7 @@ double get_residual_aasen(
     memset( L, 0, n*n*sizeof(magmaDoubleComplex) );
 
     magma_int_t i, j, piv;
-    magma_int_t nb = magma_get_zhetrf_aasen_nb(n);
+    magma_int_t nb = magma_get_zsytrf_aasen_nb(n);
     // extract L
     for (i=0; i < min(n,nb); i++) {
         L(i,i) = c_one;
@@ -253,8 +253,8 @@ double get_residual_aasen(
     // banded solver
     magma_int_t nrhs = 1, *p = NULL;
     TESTING_CHECK( magma_imalloc_cpu( &p, n ));
-    //#define ZHESV_USE_ZGESV
-    #ifdef ZHESV_USE_ZGESV
+    //#define ZSYSV_USE_ZGESV
+    #ifdef ZSYSV_USE_ZGESV
         // using ZGESV on banded matrix
         #define  T(i,j) ( T[(i) + (j)*n])
         // extract T
@@ -306,11 +306,11 @@ double get_residual_aasen(
     init_matrix( opts, n, n, A, lda );
 
     // compute r = Ax - b, saved in b
-    blasf77_zhemv( lapack_uplo_const(uplo), &n, &c_one, A, &lda, x, &ione, &c_neg_one, b, &ione );
+    lapackf77_zsymv( lapack_uplo_const(uplo), &n, &c_one, A, &lda, x, &ione, &c_neg_one, b, &ione );
 
     // compute residual |Ax - b| / (n*|A|*|x|)
     double norm_x, norm_A, norm_r, work[1];
-    norm_A = lapackf77_zlanhe( "Fro", lapack_uplo_const(uplo), &n, A, &lda, work );
+    norm_A = lapackf77_zlansy( "Fro", lapack_uplo_const(uplo), &n, A, &lda, work );
     norm_r = lapackf77_zlange( "Fro", &n, &ione, b, &n, work );
     norm_x = lapackf77_zlange( "Fro", &n, &ione, x, &n, work );
 
@@ -548,7 +548,7 @@ double get_LDLt_error(
                       &c_one, LD, &lda, L, &N, &c_zero, D, &N);
     }
     // compute norm of A
-    matnorm = lapackf77_zlanhe( "Fro", lapack_uplo_const(uplo), &N, A, &lda, work);
+    matnorm = lapackf77_zlansy( "Fro", lapack_uplo_const(uplo), &N, A, &lda, work);
 
     for( j = 0; j < N; j++ ) {
         for( i = 0; i < N; i++ ) {
@@ -586,7 +586,7 @@ double get_LTLt_error(
     memset( T, 0, N*N*sizeof(magmaDoubleComplex) );
 
     magma_int_t i, j, istart, piv;
-    magma_int_t nb = magma_get_zhetrf_aasen_nb(N);
+    magma_int_t nb = magma_get_zsytrf_aasen_nb(N);
 
     // for debuging
     /*
@@ -645,7 +645,7 @@ double get_LTLt_error(
 
     // compute norm of A
     init_matrix( opts, N, N, A, N );
-    matnorm = lapackf77_zlanhe( "Fro", lapack_uplo_const(uplo), &N, A, &lda, work);
+    matnorm = lapackf77_zlansy( "Fro", lapack_uplo_const(uplo), &N, A, &lda, work);
     //printf( "A0=" );
     //magma_zprint(N,N, &A(0,0),N);
 
@@ -704,7 +704,7 @@ double get_LTLt_error(
 #define COMPLEX
 
 /* ////////////////////////////////////////////////////////////////////////////
-   -- Testing zhetrf
+   -- Testing zsytrf
 */
 int main( int argc, char** argv)
 {
@@ -796,13 +796,13 @@ int main( int argc, char** argv)
                =================================================================== */
             if ( opts.lapack ) {
                 lwork = -1;
-                lapackf77_zhetrf( lapack_uplo_const(opts.uplo), &N, h_A, &lda, ipiv, &temp, &lwork, &info );
+                lapackf77_zsytrf( lapack_uplo_const(opts.uplo), &N, h_A, &lda, ipiv, &temp, &lwork, &info );
                 lwork = (magma_int_t)MAGMA_Z_REAL( temp );
                 TESTING_CHECK( magma_zmalloc_cpu( &work, lwork ));
 
                 init_matrix( opts, N, N, h_A, lda );
                 cpu_time = magma_wtime();
-                lapackf77_zhetrf( lapack_uplo_const(opts.uplo), &N, h_A, &lda, ipiv, work, &lwork, &info);
+                lapackf77_zsytrf( lapack_uplo_const(opts.uplo), &N, h_A, &lda, ipiv, work, &lwork, &info);
                 cpu_time = magma_wtime() - cpu_time;
                 cpu_perf = gflops / cpu_time;
 
@@ -817,7 +817,7 @@ int main( int argc, char** argv)
                 #endif
 
                 if (info != 0) {
-                    printf("lapackf77_zhetrf returned error %lld: %s.\n",
+                    printf("lapackf77_zsytrf returned error %lld: %s.\n",
                            (long long) info, magma_strerror( info ));
                 }
                 error_lapack = get_residual( opts, nopiv, opts.uplo, N, h_A, lda, ipiv );
@@ -835,13 +835,13 @@ int main( int argc, char** argv)
             if (nopiv) {
                 // CPU-interface to non-piv LDLt
                 gpu_time = magma_wtime();
-                magma_zhetrf_nopiv( opts.uplo, N, h_A, lda, &info);
+                magma_zsytrf_nopiv( opts.uplo, N, h_A, lda, &info);
                 gpu_time = magma_wtime() - gpu_time;
             }
             else if (cpu) {
                 // CPU-interface to Bunch-Kauffman LDLt
                 gpu_time = magma_wtime();
-                magma_zhetrf( opts.uplo, N, h_A, lda, ipiv, &info);
+                magma_zsytrf( opts.uplo, N, h_A, lda, ipiv, &info);
                 gpu_time = magma_wtime() - gpu_time;
 
                 // To do: extend to test inertia for real case;
@@ -866,7 +866,7 @@ int main( int argc, char** argv)
                 TESTING_CHECK( magma_zmalloc( &d_A, N*ldda ));
                 magma_zsetmatrix(N, N, h_A, lda, d_A, ldda, opts.queue );
                 gpu_time = magma_wtime();
-                magma_zhetrf_nopiv_gpu( opts.uplo, N, d_A, ldda, &info);
+                magma_zsytrf_nopiv_gpu( opts.uplo, N, d_A, ldda, &info);
                 gpu_time = magma_wtime() - gpu_time;
 
                 /*
@@ -911,7 +911,7 @@ int main( int argc, char** argv)
                 TESTING_CHECK( magma_zmalloc( &d_A, N*ldda ));
                 magma_zsetmatrix(N, N, h_A, lda, d_A, ldda, opts.queue );
                 gpu_time = magma_wtime();
-                magma_zhetrf_gpu( opts.uplo, N, d_A, ldda, ipiv, &info);
+                magma_zsytrf_gpu( opts.uplo, N, d_A, ldda, ipiv, &info);
                 gpu_time = magma_wtime() - gpu_time;
 
                 magma_zgetmatrix(N, N, d_A, ldda, h_A, lda, opts.queue );
@@ -925,7 +925,7 @@ int main( int argc, char** argv)
                 //for(int kk=0; kk<N; kk++)
                 //    h_A[kk+(N-1)*lda] = h_A[N-1+kk*lda] = 0.;
                 TESTING_CHECK( magma_malloc( (void**)&dinert, 3*sizeof(int)) );
-                magmablas_zheinertia(opts.uplo, N, d_A, ldda, ipiv, dinert, opts.queue);
+                magmablas_zsiinertia(opts.uplo, N, d_A, ldda, ipiv, dinert, opts.queue);
                 magma_getvector( 3, sizeof(int), dinert, 1, inert, 1, opts.queue );
                 printf("inertia: positive / negative / zero = %d / %d / %d\n",
                        inert[0], inert[1], inert[2]);

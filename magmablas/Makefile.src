@@ -81,6 +81,7 @@ libmagma_src += \
 	$(cdir)/clat2z.cu		\
 	$(cdir)/dznrm2.cu		\
 	$(cdir)/zsetmatrix_transpose.cpp\
+    $(cdir)/zsiinertia.cu           \
 	$(cdir)/zswap.cu		\
 	$(cdir)/zswapblk.cu		\
 	$(cdir)/zswapdblk.cu		\
@@ -125,6 +126,7 @@ libmagma_src += \
 libmagma_src += \
 	$(cdir)/zgetf2_native_kernel.cu		\
         $(cdir)/zhetrs.cu                       \
+        $(cdir)/zsytrs.cu                       \
 
 # batched files, alphabetic order by base name (ignoring precision)
 libmagma_src += \

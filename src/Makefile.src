@@ -144,27 +144,30 @@ libmagma_src += \
 # symmetric indefinite factorization, GPU interface
 libmagma_src += \
         $(cdir)/zhetrf_gpu.cpp          \
+        $(cdir)/zsytrf_gpu.cpp          \
 
 # symmetric indefinite factorization, CPU interface
 libmagma_src += \
 	$(cdir)/zchesv_gpu.cpp		\
         \
 	$(cdir)/zhesv.cpp		\
-	$(cdir)/zsysv.cpp		\
+	$(cdir)/zhesv_nopiv_gpu.cpp	\
 	$(cdir)/zhetrf.cpp		\
         $(cdir)/dsidi.cpp               \
-	$(cdir)/zsytrf.cpp		\
 	$(cdir)/zhetrf_aasen.cpp	\
 	$(cdir)/zhetrf_nopiv.cpp	\
 	$(cdir)/zhetrf_nopiv_cpu.cpp	\
-	$(cdir)/zsytrf_nopiv_cpu.cpp	\
 	$(cdir)/zhetrf_nopiv_gpu.cpp	\
-	$(cdir)/zsytrf_nopiv_gpu.cpp	\
 	$(cdir)/zhetrs_nopiv_gpu.cpp	\
-	$(cdir)/zsytrs_nopiv_gpu.cpp	\
-	$(cdir)/zhesv_nopiv_gpu.cpp	\
-	$(cdir)/zsysv_nopiv_gpu.cpp	\
 	$(cdir)/zlahef_gpu.cpp		\
+	$(cdir)/zsysv.cpp		\
+	$(cdir)/zsysv_nopiv_gpu.cpp	\
+	$(cdir)/zsytrf.cpp		\
+	$(cdir)/zsytrf_aasen.cpp	\
+	$(cdir)/zsytrf_nopiv.cpp	\
+	$(cdir)/zsytrf_nopiv_cpu.cpp	\
+	$(cdir)/zsytrf_nopiv_gpu.cpp	\
+	$(cdir)/zsytrs_nopiv_gpu.cpp	\
 	$(cdir)/zlasyf_gpu.cpp		\
 
 # ----------

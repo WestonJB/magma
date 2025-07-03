@@ -234,6 +234,15 @@ magma_zhetrs_gpu(
     magma_int_t *info,
     magma_queue_t queue );
 
+magma_int_t
+magma_zsytrs_gpu(
+    magma_uplo_t uplo, magma_int_t n, magma_int_t nrhs,
+    magmaDoubleComplex *dA, magma_int_t ldda,
+    magma_int_t *ipiv,
+    magmaDoubleComplex *dB, magma_int_t lddb,
+    magma_int_t *info,
+    magma_queue_t queue );
+
 // Ichi's version, in src/zhetrd_mgpu.cpp
 void
 magma_zher2k_mgpu(
@@ -475,6 +484,15 @@ magma_zlaswp_columnserial(
     magma_int_t n, magmaDoubleComplex_ptr dA, magma_int_t lda,
     magma_int_t k1, magma_int_t k2,
     magma_int_t *dipiv, magma_queue_t queue);
+
+magma_int_t
+magmablas_zsiinertia(
+    magma_uplo_t uplo,
+    magma_int_t n,
+    magmaDoubleComplex_const_ptr dA, magma_int_t ldda,
+    magma_int_t *ipiv,
+    int *dneig,
+    magma_queue_t queue );
 
 void
 magmablas_zsymmetrize(

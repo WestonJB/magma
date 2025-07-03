@@ -127,6 +127,7 @@ extern "C" {
 #define lapackf77_zlascl   FORTRAN_NAME( zlascl, ZLASCL )
 #define lapackf77_zlaset   FORTRAN_NAME( zlaset, ZLASET )
 #define lapackf77_zlaswp   FORTRAN_NAME( zlaswp, ZLASWP )
+#define lapackf77_zlasyf   FORTRAN_NAME( zlasyf, ZLASYF )
 #define lapackf77_zlatrd   FORTRAN_NAME( zlatrd, ZLATRD )
 #define lapackf77_zlatrs   FORTRAN_NAME( zlatrs, ZLATRS )
 #define lapackf77_zlauum   FORTRAN_NAME( zlauum, ZLAUUM )
@@ -142,6 +143,7 @@ extern "C" {
 #define lapackf77_zsymv    FORTRAN_NAME( zsymv,  ZSYMV  )
 #define lapackf77_zsyr     FORTRAN_NAME( zsyr,   ZSYR   )
 #define lapackf77_zsytf2   FORTRAN_NAME( zsytf2, ZSYTF2 )
+#define lapackf77_zsytrf   FORTRAN_NAME( zsytrf, ZSYTRF )
 #define lapackf77_zsytrs   FORTRAN_NAME( zsytrs, ZSYTRS )
 #define lapackf77_zsysv    FORTRAN_NAME( zsysv,  ZSYSV  )
 #define lapackf77_ztrevc   FORTRAN_NAME( ztrevc, ZTREVC )
@@ -889,6 +891,14 @@ void   lapackf77_zlaswp( const magma_int_t *n,
                          const magma_int_t *ipiv,
                          const magma_int_t *incx );
 
+void   lapackf77_zlasyf( const char *uplo,
+                         const magma_int_t *n, const magma_int_t *nb,
+                         magma_int_t *kb,
+                         magmaDoubleComplex *A, const magma_int_t *lda,
+                         magma_int_t *ipiv,
+                         magmaDoubleComplex *work, const magma_int_t *ldwork,
+                         magma_int_t *info );
+
 void   lapackf77_zlatrd( const char *uplo,
                          const magma_int_t *n, const magma_int_t *nb,
                          magmaDoubleComplex *A, const magma_int_t *lda,
@@ -1004,6 +1014,13 @@ void   lapackf77_zsysv(  const char *uplo,
 void   lapackf77_zsytf2( const char *uplo, const magma_int_t *n,
                          magmaDoubleComplex *A, const magma_int_t *lda,
                          magma_int_t *ipiv,
+                         magma_int_t *info );
+
+void   lapackf77_zsytrf( const char *uplo,
+                         const magma_int_t *n,
+                         magmaDoubleComplex *A, const magma_int_t *lda,
+                         magma_int_t *ipiv,
+                         magmaDoubleComplex *work, const magma_int_t *lwork,
                          magma_int_t *info );
 
 void   lapackf77_zsytrs( const char *uplo,

@@ -1662,6 +1662,26 @@ magma_zsytrf(
     magma_int_t *ipiv,
     magma_int_t *info);
 
+magma_int_t
+magma_zsytrf_gpu(
+   magma_uplo_t uplo, magma_int_t n,
+   magmaDoubleComplex *dA, magma_int_t ldda,
+   magma_int_t *ipiv,
+   magma_int_t *info);
+
+// CUDA MAGMA only
+magma_int_t
+magma_zsytrf_aasen(
+    magma_uplo_t uplo, magma_int_t cpu_panel, magma_int_t n,
+    magmaDoubleComplex *A, magma_int_t lda,
+    magma_int_t *ipiv, magma_int_t *info);
+
+magma_int_t
+magma_zsytrf_nopiv(
+    magma_uplo_t uplo, magma_int_t n,
+    magmaDoubleComplex *A, magma_int_t lda,
+    magma_int_t *info);
+
 // CUDA MAGMA only
 magma_int_t
 magma_zsytrf_nopiv_cpu(

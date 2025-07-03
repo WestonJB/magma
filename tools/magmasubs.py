@@ -303,7 +303,6 @@ lapack = [
     ('ssygs2',         'dsygs2',         'chegs2',         'zhegs2'          ),
     ('ssygst',         'dsygst',         'chegst',         'zhegst'          ),
     ('ssygv',          'dsygv',          'chegv',          'zhegv'           ),
-    ('ssysv',          'dsysv',          'csysv',          'zsysv'           ),
     ('ssyt21',         'dsyt21',         'chet21',         'zhet21'          ),
     ('ssyt22',         'dsyt22',         'chet22',         'zhet22'          ),
     ('ssytd2',         'dsytd2',         'chetd2',         'zhetd2'          ),

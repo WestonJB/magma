@@ -1681,6 +1681,42 @@ subroutine magmaf_zsysv_nopiv_gpu( uplo, n, nrhs, dA, ldda, dB, lddb, info )
     integer          :: info
 end
 
+subroutine magmaf_zsytrf( uplo, n, A, lda, ipiv, info )
+    character        :: uplo
+    integer          :: n
+    complex*16       :: A(*)
+    integer          :: lda
+    integer          :: ipiv(*)
+    integer          :: info
+end
+
+subroutine magmaf_zsytrf_gpu( uplo, n, dA, ldda, ipiv, info )
+    character        :: uplo
+    integer          :: n
+    complex*16       :: dA(*)
+    integer          :: ldda
+    integer          :: ipiv(*)
+    integer          :: info
+end
+
+subroutine magmaf_zsytrf_aasen( uplo, cpu_panel, n, A, lda, ipiv, info )
+    character        :: uplo
+    integer          :: cpu_panel
+    integer          :: n
+    complex*16       :: A(*)
+    integer          :: lda
+    integer          :: ipiv(*)
+    integer          :: info
+end
+
+subroutine magmaf_zsytrf_nopiv( uplo, n, A, lda, info )
+    character        :: uplo
+    integer          :: n
+    complex*16       :: A(*)
+    integer          :: lda
+    integer          :: info
+end
+
 subroutine magmaf_zsytrf_nopiv_cpu( uplo, n, ib, A, lda, info )
     character        :: uplo
     integer          :: n
