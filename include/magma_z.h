@@ -35,6 +35,9 @@ magma_int_t magma_get_zgetri_nb( magma_int_t n );
 magma_int_t magma_get_zhetrf_nb( magma_int_t n );
 magma_int_t magma_get_zhetrf_nopiv_nb( magma_int_t n );
 magma_int_t magma_get_zhetrf_aasen_nb( magma_int_t n );
+magma_int_t magma_get_zsytrf_nb( magma_int_t n );
+magma_int_t magma_get_zsytrf_nopiv_nb( magma_int_t n );
+magma_int_t magma_get_zsytrf_aasen_nb( magma_int_t n );
 
 // QR
 magma_int_t magma_get_zgeqp3_nb( magma_int_t m, magma_int_t n );
@@ -1426,6 +1429,15 @@ magma_zlarfb2_gpu(
     magma_queue_t queue);
 
 magma_int_t
+magma_zlasyf_gpu(
+    magma_uplo_t uplo, magma_int_t n, magma_int_t nb, magma_int_t *kb,
+    magmaDoubleComplex_ptr dA, magma_int_t ldda,
+    magma_int_t *ipiv,
+    magmaDoubleComplex_ptr dW, magma_int_t lddw,
+    magma_queue_t queues[],
+    magma_int_t *info);
+
+magma_int_t
 magma_zlatrd(
     magma_uplo_t uplo, magma_int_t n, magma_int_t nb,
     magmaDoubleComplex *A, magma_int_t lda,
@@ -1629,10 +1641,25 @@ magma_zpotrs_expert_gpu_work(
 #ifdef MAGMA_COMPLEX
 // CUDA MAGMA only
 magma_int_t
+magma_zsysv(
+    magma_uplo_t uplo, magma_int_t n, magma_int_t nrhs,
+    magmaDoubleComplex *A, magma_int_t lda,
+    magma_int_t *ipiv,
+    magmaDoubleComplex *B, magma_int_t ldb,
+    magma_int_t *info);
+
+magma_int_t
 magma_zsysv_nopiv_gpu(
     magma_uplo_t uplo,  magma_int_t n, magma_int_t nrhs,
     magmaDoubleComplex_ptr dA, magma_int_t ldda,
     magmaDoubleComplex_ptr dB, magma_int_t lddb,
+    magma_int_t *info);
+
+magma_int_t
+magma_zsytrf(
+    magma_uplo_t uplo, magma_int_t n,
+    magmaDoubleComplex *A, magma_int_t lda,
+    magma_int_t *ipiv,
     magma_int_t *info);
 
 // CUDA MAGMA only

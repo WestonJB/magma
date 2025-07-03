@@ -133,7 +133,7 @@ int main(int argc, char **argv)
                 cpu_time = magma_wtime() - cpu_time;
                 cpu_perf = gflops / cpu_time;
                 if (info != 0) {
-                    printf("lapackf77_zhesv returned error %lld: %s.\n",
+                    printf("lapackf77_zsysv returned error %lld: %s.\n",
                            (long long) info, magma_strerror( info ));
                 }
                 

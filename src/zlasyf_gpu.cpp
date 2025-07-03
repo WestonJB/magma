@@ -144,7 +144,7 @@ magma_zlasyf_gpu(
     if ( upper ) {
         /* Factorize the trailing columns of A using the upper triangle
            of A and working backwards, and compute the matrix W = U12*D
-           for use in updating A11 (note that conjg(W) is actually stored)
+           for use in updating A11
 
            K is the main loop index, decreasing from N in steps of 1 or 2
 
@@ -173,7 +173,7 @@ magma_zlasyf_gpu(
 
             magma_zgetvector_async( 1, &dW( k, kw ), 1, &Z, 1, queues[0] );
             magma_queue_sync( queues[0] );
-            abs_akk = fabs( MAGMA_Z_REAL( Z ) );
+            abs_akk = MAGMA_Z_ABS1( Z );
 
             /* imax is the row-index of the largest off-diagonal element in
                column K, and colmax is its absolute value */
@@ -225,7 +225,7 @@ magma_zlasyf_gpu(
                     if ( abs_akk >= alpha*colmax*( colmax / rowmax ) ) {
                         /* no interchange, use 1-by-1 pivot block */
                         kp = k;
-                    } else if ( fabs( MAGMA_Z_REAL( Zimax ) ) >= alpha*rowmax ) {
+                    } else if ( fabs( MAGMA_Z_ABS1( Zimax ) ) >= alpha*rowmax ) {
                         /* interchange rows and columns K and imax, use 1-by-1
                            pivot block */
                         kp = imax;
@@ -446,7 +446,7 @@ magma_zlasyf_gpu(
                     if ( abs_akk >= alpha*colmax*( colmax / rowmax ) ) {
                         /* no interchange, use 1-by-1 pivot block */
                         kp = k;
-                    } else if ( fabs( MAGMA_Z_REAL( Zimax ) ) >= alpha*rowmax ) {
+                    } else if ( fabs( MAGMA_Z_ABS1( Zimax ) ) >= alpha*rowmax ) {
                         /* interchange rows and columns K and imax, use 1-by-1
                            pivot block */
                         kp = imax;
@@ -599,5 +599,5 @@ magma_zlasyf_gpu(
     }
 
     return *info;
-    /* End of ZLAHEF */
+    /* End of ZLASYF */
 }

@@ -784,6 +784,9 @@ hesv = (
 
 	('testing_zhesv_nopiv_gpu',     '-L -c',  n,    ''),
 	('testing_zhesv_nopiv_gpu',     '-U -c',  n,    ''),
+ 
+	('testing_zsysv',               '-L -c',  n,    ''),
+	('testing_zsysv',               '-U -c',  n,    ''),
 
 	('testing_zsysv_nopiv_gpu',     '-L -c',  n,    ''),
 	('testing_zsysv_nopiv_gpu',     '-U -c',  n,    ''),

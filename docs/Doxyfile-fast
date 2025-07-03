@@ -1467,6 +1467,7 @@ INPUT                  = \
 	../src/zlarfb_gpu.cpp                                       \
 	../src/zlarfb_gpu_gemm.cpp                                  \
 	../src/zlarft_batched.cpp                                   \
+	../src/zlasyf_gpu.cpp                                       \
 	../src/zlatrd.cpp                                           \
 	../src/zlatrd2.cpp                                          \
 	../src/zlatrd_mgpu.cpp                                      \
@@ -1495,6 +1496,7 @@ INPUT                  = \
 	../src/zpotrs_gpu.cpp                                       \
 	../src/zstedx.cpp                                           \
 	../src/zstedx_m.cpp                                         \
+	../src/zsysv.cpp                                            \
 	../src/zsysv_nopiv_gpu.cpp                                  \
 	../src/zsytrf_nopiv_cpu.cpp                                 \
 	../src/zsytrf_nopiv_gpu.cpp                                 \

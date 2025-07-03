@@ -89,6 +89,7 @@ testing_src += \
 testing_src += \
 	$(cdir)/testing_zhesv.cpp	\
 	$(cdir)/testing_zhesv_nopiv_gpu.cpp	\
+	$(cdir)/testing_zsysv.cpp	\
 	$(cdir)/testing_zsysv_nopiv_gpu.cpp	\
 	$(cdir)/testing_zhetrf.cpp	\
 

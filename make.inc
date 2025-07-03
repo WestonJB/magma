@@ -64,13 +64,13 @@ endif
 FPIC      = -fPIC
 
 # now, generate our flags
-CFLAGS      = -O3 $(FPIC) -DNDEBUG -DADD_ -Wall -fopenmp -std=c99
-CXXFLAGS    = -O3 $(FPIC) -DNDEBUG -DADD_ -Wall -fopenmp -std=c++11
-FFLAGS      = -O3 $(FPIC) -DNDEBUG -DADD_ -Wall -Wno-unused-dummy-argument
-F90FLAGS    = -O3 $(FPIC) -DNDEBUG -DADD_ -Wall -Wno-unused-dummy-argument -x f95-cpp-input
+CFLAGS      = -O0 -g $(FPIC) -DNDEBUG -DADD_ -Wall -fopenmp -std=c99
+CXXFLAGS    = -O0 -g $(FPIC) -DNDEBUG -DADD_ -Wall -fopenmp -std=c++11
+FFLAGS      = -O0 -g $(FPIC) -DNDEBUG -DADD_ -Wall -Wno-unused-dummy-argument
+F90FLAGS    = -O0 -g $(FPIC) -DNDEBUG -DADD_ -Wall -Wno-unused-dummy-argument -x f95-cpp-input
 LDFLAGS     =     $(FPIC)                       -fopenmp
 
-DEVCCFLAGS  = -O3         -DNDEBUG -DADD_
+DEVCCFLAGS  = -O0         -DNDEBUG -DADD_
 
 # DEVCCFLAGS are populated later in `backend-specific`
 

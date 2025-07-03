@@ -150,8 +150,10 @@ libmagma_src += \
 	$(cdir)/zchesv_gpu.cpp		\
         \
 	$(cdir)/zhesv.cpp		\
+	$(cdir)/zsysv.cpp		\
 	$(cdir)/zhetrf.cpp		\
         $(cdir)/dsidi.cpp               \
+	$(cdir)/zsytrf.cpp		\
 	$(cdir)/zhetrf_aasen.cpp	\
 	$(cdir)/zhetrf_nopiv.cpp	\
 	$(cdir)/zhetrf_nopiv_cpu.cpp	\
@@ -163,6 +165,7 @@ libmagma_src += \
 	$(cdir)/zhesv_nopiv_gpu.cpp	\
 	$(cdir)/zsysv_nopiv_gpu.cpp	\
 	$(cdir)/zlahef_gpu.cpp		\
+	$(cdir)/zlasyf_gpu.cpp		\
 
 # ----------
 # symmetric eigenvalues, GPU interface

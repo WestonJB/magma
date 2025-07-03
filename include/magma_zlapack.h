@@ -141,6 +141,8 @@ extern "C" {
 #define lapackf77_zsteqr   FORTRAN_NAME( zsteqr, ZSTEQR )
 #define lapackf77_zsymv    FORTRAN_NAME( zsymv,  ZSYMV  )
 #define lapackf77_zsyr     FORTRAN_NAME( zsyr,   ZSYR   )
+#define lapackf77_zsytf2   FORTRAN_NAME( zsytf2, ZSYTF2 )
+#define lapackf77_zsytrs   FORTRAN_NAME( zsytrs, ZSYTRS )
 #define lapackf77_zsysv    FORTRAN_NAME( zsysv,  ZSYSV  )
 #define lapackf77_ztrevc   FORTRAN_NAME( ztrevc, ZTREVC )
 #define lapackf77_ztrevc3  FORTRAN_NAME( ztrevc3, ZTREVC3 )
@@ -997,6 +999,18 @@ void   lapackf77_zsysv(  const char *uplo,
                          magmaDoubleComplex *A, const magma_int_t *lda, magma_int_t *ipiv,
                          magmaDoubleComplex *B, const magma_int_t *ldb,
                          magmaDoubleComplex *work, const magma_int_t *lwork,
+                         magma_int_t *info );
+
+void   lapackf77_zsytf2( const char *uplo, const magma_int_t *n,
+                         magmaDoubleComplex *A, const magma_int_t *lda,
+                         magma_int_t *ipiv,
+                         magma_int_t *info );
+
+void   lapackf77_zsytrs( const char *uplo,
+                         const magma_int_t *n, const magma_int_t *nrhs,
+                         const magmaDoubleComplex *A, const magma_int_t *lda,
+                         const magma_int_t *ipiv,
+                         magmaDoubleComplex *B, const magma_int_t *ldb,
                          magma_int_t *info );
 
 #endif  // MAGMA_COMPLEX

@@ -949,6 +949,18 @@ magma_int_t magma_get_chetrf_nb( magma_int_t n )
     return 256;
 }
 
+/// @return nb for zsytrf based on n
+magma_int_t magma_get_zsytrf_nb( magma_int_t n )
+{
+    return 256;
+}
+
+/// @return nb for csytrf based on n
+magma_int_t magma_get_csytrf_nb( magma_int_t n )
+{
+    return 256;
+}
+
 /// @return nb for dsytrf based on n
 magma_int_t magma_get_dsytrf_nb( magma_int_t n )
 {
@@ -975,6 +987,18 @@ magma_int_t magma_get_chetrf_aasen_nb( magma_int_t n )
     return 256;
 }
 
+/// @return nb for zsytrf_aasen based on n
+magma_int_t magma_get_zsytrf_aasen_nb( magma_int_t n )
+{
+    return 256;
+}
+
+/// @return nb for csytrf_aasen based on n
+magma_int_t magma_get_csytrf_aasen_nb( magma_int_t n )
+{
+    return 256;
+}
+
 /// @return nb for dsytrf_aasen based on n
 magma_int_t magma_get_dsytrf_aasen_nb( magma_int_t n )
 {
@@ -997,6 +1021,18 @@ magma_int_t magma_get_zhetrf_nopiv_nb( magma_int_t n )
 
 /// @return nb for chetrf_nopiv based on n
 magma_int_t magma_get_chetrf_nopiv_nb( magma_int_t n )
+{
+    return 320;
+}
+
+/// @return nb for zsytrf_nopiv based on n
+magma_int_t magma_get_zsytrf_nopiv_nb( magma_int_t n )
+{
+    return 320;
+}
+
+/// @return nb for csytrf_nopiv based on n
+magma_int_t magma_get_csytrf_nopiv_nb( magma_int_t n )
 {
     return 320;
 }

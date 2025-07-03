@@ -43,6 +43,18 @@ integer function magmaf_get_zhetrf_aasen_nb( n )
     integer          :: n
 end
 
+integer function magmaf_get_zsytrf_nb( n )
+    integer          :: n
+end
+
+integer function magmaf_get_zsytrf_nopiv_nb( n )
+    integer          :: n
+end
+
+integer function magmaf_get_zhsytrf_aasen_nb( n )
+    integer          :: n
+end
+
 integer function magmaf_get_zgeqp3_nb( m, n )
     integer          :: m
     integer          :: n
@@ -1643,6 +1655,18 @@ subroutine magmaf_zpotrs_gpu( uplo, n, nrhs, dA, ldda, dB, lddb, info )
     integer          :: ldda
     magma_devptr_t   :: dB
     integer          :: lddb
+    integer          :: info
+end
+
+subroutine magmaf_zsysv( uplo, n, nrhs, A, lda, ipiv, B, ldb, info )
+    character        :: uplo
+    integer          :: n
+    integer          :: nrhs
+    complex*16       :: A(*)
+    integer          :: lda
+    integer          :: ipiv(*)
+    complex*16       :: B(*)
+    integer          :: ldb
     integer          :: info
 end
 

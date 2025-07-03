@@ -88,6 +88,30 @@ magma_int_t magmaf_get_zhetrf_aasen_nb(
         *n );
 }
 
+#define magmaf_get_zsytrf_nb FORTRAN_NAME( magmaf_get_zsytrf_nb, MAGMAF_GET_ZSYTRF_NB )
+magma_int_t magmaf_get_zsytrf_nb(
+    magma_int_t *n )
+{
+    return magma_get_zsytrf_nb(
+        *n );
+}
+
+#define magmaf_get_zsytrf_nopiv_nb FORTRAN_NAME( magmaf_get_zsytrf_nopiv_nb, MAGMAF_GET_ZSYTRF_NOPIV_NB )
+magma_int_t magmaf_get_zsytrf_nopiv_nb(
+    magma_int_t *n )
+{
+    return magma_get_zsytrf_nopiv_nb(
+        *n );
+}
+
+#define magmaf_get_zsytrf_aasen_nb FORTRAN_NAME( magmaf_get_zsytrf_aasen_nb, MAGMAF_GET_ZSYTRF_AASEN_NB )
+magma_int_t magmaf_get_zsytrf_aasen_nb(
+    magma_int_t *n )
+{
+    return magma_get_zsytrf_aasen_nb(
+        *n );
+}
+
 #define magmaf_get_zgeqp3_nb FORTRAN_NAME( magmaf_get_zgeqp3_nb, MAGMAF_GET_ZGEQP3_NB )
 magma_int_t magmaf_get_zgeqp3_nb(
     magma_int_t *m, magma_int_t *n )
@@ -2100,6 +2124,22 @@ void magmaf_zpotrs_gpu(
         info );
 }
 
+#define magmaf_zsysv FORTRAN_NAME( magmaf_zsysv, MAGMAF_ZSYSV )
+void magmaf_zsysv(
+    const char* uplo, magma_int_t *n, magma_int_t *nrhs,
+    magmaDoubleComplex *A, magma_int_t *lda,
+    magma_int_t *ipiv,
+    magmaDoubleComplex *B, magma_int_t *ldb,
+    magma_int_t *info )
+{
+    magma_zsysv(
+        magma_uplo_const(*uplo), *n, *nrhs,
+        A, *lda,
+        ipiv,
+        B, *ldb,
+        info );
+}
+
 #define magmaf_zsysv_nopiv_gpu FORTRAN_NAME( magmaf_zsysv_nopiv_gpu, MAGMAF_ZSYSV_NOPIV_GPU )
 void magmaf_zsysv_nopiv_gpu(
     const char* uplo, magma_int_t *n, magma_int_t *nrhs,
@@ -2111,6 +2151,20 @@ void magmaf_zsysv_nopiv_gpu(
         magma_uplo_const(*uplo), *n, *nrhs,
         magma_zdevptr(dA), *ldda,
         magma_zdevptr(dB), *lddb,
+        info );
+}
+
+#define magmaf_zsytrf FORTRAN_NAME( magmaf_zsytrf, MAGMAF_ZSYTRF )
+void magmaf_zsytrf(
+    const char* uplo, magma_int_t *n,
+    magmaDoubleComplex *A, magma_int_t *lda,
+    magma_int_t *ipiv,
+    magma_int_t *info )
+{
+    magma_zsytrf(
+        magma_uplo_const(*uplo), *n,
+        A, *lda,
+        ipiv,
         info );
 }
 

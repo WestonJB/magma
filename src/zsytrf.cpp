@@ -180,7 +180,7 @@ magma_zsytrf(
         /* Factorize A as U*D*U^T using the upper triangle of A
 
            K is the main loop index, decreasing from N to 1 in steps of
-           KB, where KB is the number of columns factorized by ZLAHEF;
+           KB, where KB is the number of columns factorized by ZLASYF;
            KB is either NB or NB-1, or K for the last block */
 
         kb = min(n,nb);
@@ -218,7 +218,7 @@ magma_zsytrf(
         /* Factorize A as L*D*L' using the lower triangle of A
 
            K is the main loop index, increasing from 1 to N in steps of
-           KB, where KB is the number of columns factorized by ZLAHEF;
+           KB, where KB is the number of columns factorized by ZLASYF;
            KB is either NB or NB-1, or N-K+1 for the last block */
 
         for (k = 0; k < n; k += kb ) {
@@ -236,7 +236,8 @@ magma_zsytrf(
                 trace_gpu_start( 0, 1, "get", "get" );
                 magma_zgetmatrix_async( nk, kb, dA(k,k), ldda, A(k,k), lda, queues[1] );
                 trace_gpu_end( 0, 1 ); 
-            } else {
+            }
+            else {
                 /* Use unblocked code to factorize columns k:n of A */
                 magma_queue_sync( queues[0] );
                 magma_zgetmatrix( nk, nk, dA(k,k), ldda, A(k,k), lda, queues[0] );
@@ -255,7 +256,7 @@ magma_zsytrf(
         }
     }
 
-    trace_finalize( "zhetrf.svg", "trace.css" );
+    trace_finalize( "zsytrf.svg", "trace.css" );
     magma_queue_sync( queues[0] );
     magma_queue_sync( queues[1] );
     magma_event_destroy( event );
@@ -265,4 +266,4 @@ magma_zsytrf(
     magma_free( dW );
     
     return *info;
-}   /* End of ZHETRF */
+}   /* End of ZSYTRF */

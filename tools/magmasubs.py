@@ -254,6 +254,7 @@ lapack = [
     ('slatms',         'dlatms',         'clatms',         'zlatms'          ),
     ('slatrd',         'dlatrd',         'clatrd',         'zlatrd'          ),
     ('slatrs',         'dlatrs',         'clatrs',         'zlatrs'          ),
+    ('slasyf',         'dlasyf',         'clasyf',         'zlasyf'          ),
     ('slauum',         'dlauum',         'clauum',         'zlauum'          ),
     ('slavsy',         'dlavsy',         'clavhe',         'zlavhe'          ),
     ('sorg2r',         'dorg2r',         'cung2r',         'zung2r'          ),
